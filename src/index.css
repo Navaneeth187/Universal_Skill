@@ -1,0 +1,218 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code&family=Inter:wght@400;500;600;700&display=swap');
+
+/* Reset stylesheet for Universal Skills Chrome Extension */
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+:root {
+  /* LIGHT MODE (Default) */
+  --bg-app: #f8fafc;
+  --bg-sidebar: #f1f5f9;
+  --bg-panel: #ffffff;
+  --border-neutral: #e2e8f0;
+  --border-focus: #6366f1;
+  --card-bg: #ffffff;
+  --card-border: #e2e8f0;
+  --card-hover-border: #cbd5e1;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --brand-primary: #6366f1;
+  --brand-primary-hover: #4f46e5;
+  --brand-glow: rgba(99, 102, 241, 0.04);
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.8);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 0 1px rgba(0,0,0,0.1);
+  --active-glow: 0 0 12px rgba(99, 102, 241, 0.15);
+
+  /* Compatibility theme tokens */
+  --bg: var(--bg-app);
+  --bg-header: #ffffff;
+  --border: var(--border-neutral);
+  --logo-title: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+  --button-secondary-bg: #ffffff;
+  --button-secondary-border: #e2e8f0;
+  --button-secondary-text: #475569;
+  --card-active-bg: rgba(99, 102, 241, 0.03);
+  --card-active-border: #6366f1;
+  --input-bg: #ffffff;
+  --input-border: #cbd5e1;
+  --input-text: #0f172a;
+  --code-bg: #f8fafc;
+  --code-border: #cbd5e1;
+  --shadow: var(--shadow-sm);
+  --glow: rgba(99, 102, 241, 0.05);
+}
+
+[data-theme='dark'] {
+  /* DARK MODE (Sleek Dark Cyberpunk) */
+  --bg-app: #030712;
+  --bg-sidebar: #0b0f19;
+  --bg-panel: #070a13;
+  --border-neutral: rgba(255, 255, 255, 0.05);
+  --border-focus: #818cf8;
+  --card-bg: rgba(255, 255, 255, 0.015);
+  --card-border: rgba(255, 255, 255, 0.03);
+  --card-hover-border: rgba(255, 255, 255, 0.08);
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --brand-primary: #6366f1;
+  --brand-primary-hover: #4f46e5;
+  --brand-glow: rgba(99, 102, 241, 0.15);
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.6), 0 0 1px rgba(255,255,255,0.1);
+  --active-glow: 0 0 12px rgba(99, 102, 241, 0.25);
+
+  /* Compatibility theme tokens */
+  --bg: var(--bg-app);
+  --bg-header: #0b0f19;
+  --border: var(--border-neutral);
+  --logo-title: linear-gradient(135deg, #c7d2fe 0%, #818cf8 100%);
+  --button-secondary-bg: rgba(255, 255, 255, 0.02);
+  --button-secondary-border: rgba(255, 255, 255, 0.05);
+  --button-secondary-text: #cbd5e1;
+  --card-active-bg: rgba(99, 102, 241, 0.1);
+  --card-active-border: #818cf8;
+  --input-bg: rgba(0, 0, 0, 0.2);
+  --input-border: rgba(255, 255, 255, 0.05);
+  --input-text: #f8fafc;
+  --code-bg: rgba(255, 255, 255, 0.01);
+  --code-border: rgba(255, 255, 255, 0.03);
+  --shadow: var(--shadow-md);
+  --glow: rgba(99, 102, 241, 0.2);
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow: hidden;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* Custom scrollbars for dashboard scrollable lists */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.4);
+}
+
+/* Premium Component Interactions */
+.premium-btn-primary {
+  transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 4px rgba(99, 102, 241, 0.2);
+}
+.premium-btn-primary:hover {
+  background-color: var(--brand-primary-hover) !important;
+  box-shadow: 0 4px 8px rgba(99, 102, 241, 0.3);
+}
+.premium-btn-primary:active {
+  transform: scale(0.97);
+}
+
+.premium-btn-secondary {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
+}
+.premium-btn-secondary:hover {
+  background-color: var(--bg-sidebar) !important;
+  border-color: var(--card-hover-border) !important;
+  color: var(--text-primary) !important;
+}
+.premium-btn-secondary:active {
+  transform: scale(0.97);
+}
+
+.premium-btn-danger {
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+}
+.premium-btn-danger:hover {
+  background-color: #dc2626 !important;
+  color: white !important;
+}
+.premium-btn-danger:active {
+  transform: scale(0.97);
+}
+
+/* Sidebar Navigation Items */
+.premium-sidebar-btn {
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
+}
+.premium-sidebar-btn:hover {
+  background-color: var(--border-neutral) !important;
+  color: var(--text-primary) !important;
+}
+.premium-sidebar-btn:active {
+  transform: scale(0.98);
+}
+
+/* Standardized cards with elevation depth */
+.premium-card {
+  transition: border-color 0.2s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+}
+.premium-card:hover {
+  border-color: var(--border-focus) !important;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md) !important;
+}
+
+/* Platform list row items */
+.premium-row-item {
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+.premium-row-item:hover {
+  background-color: var(--bg-sidebar) !important;
+  border-color: var(--card-hover-border) !important;
+}
+
+/* Inputs & Form focus rules */
+.premium-input {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.premium-input:focus {
+  border-color: var(--border-focus) !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12) !important;
+}
+
+/* Custom interactive checkbox toggle */
+.premium-checkbox {
+  transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.1s ease;
+}
+.premium-checkbox:hover {
+  border-color: var(--border-focus) !important;
+  transform: scale(1.05);
+}
+.premium-checkbox:active {
+  transform: scale(0.95);
+}
+
+/* Logo badge gradient pulse animation */
+@keyframes logoPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+.premium-logo-badge:hover {
+  animation: logoPulse 1.2s infinite ease-in-out;
+}
