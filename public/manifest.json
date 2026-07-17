@@ -1,0 +1,58 @@
+{
+  "manifest_version": 3,
+  "name": "Universal Skills",
+  "version": "1.0.0",
+  "description": "Claude-style portable skills (.md) for ChatGPT, Claude, Gemini, Grok, Perplexity, DeepSeek, and Qwen.",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "tabs",
+    "unlimitedStorage"
+  ],
+  "host_permissions": [
+    "https://*.chatgpt.com/*",
+    "https://*.openai.com/*",
+    "https://*.claude.ai/*",
+    "https://*.gemini.google.com/*",
+    "https://*.perplexity.ai/*",
+    "https://*.grok.com/*",
+    "https://*.x.com/*",
+    "https://*.deepseek.com/*",
+    "https://*.qwen.ai/*",
+    "https://*.qwenlm.ai/*",
+    "https://raw.githubusercontent.com/*",
+    "https://github.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "src/popup/index.html",
+    "default_title": "Universal Skills"
+  },
+  "options_ui": {
+    "page": "src/options/index.html",
+    "open_in_tab": true
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.chatgpt.com/*",
+        "https://*.openai.com/*",
+        "https://*.claude.ai/*",
+        "https://*.gemini.google.com/*",
+        "https://*.perplexity.ai/*",
+        "https://*.grok.com/*",
+        "https://*.x.com/i/grok*",
+        "https://*.deepseek.com/*",
+        "https://*.qwen.ai/*",
+        "https://*.qwenlm.ai/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}
