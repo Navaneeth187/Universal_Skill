@@ -164,16 +164,6 @@ editorElement.dispatchEvent(new Event('input', { bubbles: true }));
 
 ---
 
-## CLI & Configuration Generator Commands
-
-Commands planned for the command-line interface helper:
-
-| Command | Action | Output |
-| :--- | :--- | :--- |
-| `uskills init` | Initializes workspace configuration. | Creates `universal-skills.json` |
-| `uskills list` | Lists all active and cached skills. | Console table output |
-| `uskills add <path>` | Registers a local `.md` file to the registry. | Adds to local library |
-| `uskills compile` | Generates IDE-specific rule configurations. | Appends custom rules to `.cursorrules` / `CLAUDE.md` |
 
 ---
 
