@@ -141,16 +141,53 @@ npx uskills compile
 
 ## The Alignment Pipeline (How it works)
 
-When you submit a message, Universal Skills runs the following checks before sending it to the LLM:
+When you submit a message, the content script intercepts the submission and runs the **Prompt Interception & Injection Flow** to wrap your prompt with active skill instructions:
 
-```
-1. Is this a new conversation?
-   ├─ YES ──► Inject full active skill content + frontmatter guidelines.
-   └─ NO  ──► Skip full injection.
-
-2. Does current message count match the refresh interval (default: 6)?
-   ├─ YES ──► Append periodic alignment reminder suffix.
-   └─ NO  ──► Submit original prompt untouched.
+```text
+=================================================================================
+                               HOW A PROMPT TRAVELS
+=================================================================================
+ 
+   +-----------------------+
+   |   User types message  |
+   |   and hits ENTER      |
+   +-----------------------+
+               │
+               ▼
+   +-----------------------+
+   |  content.ts captures  | <── Reads active configurations
+   |  submit event listener|     from chrome.storage.local
+   +-----------------------+
+               │
+               ├────────────────────────────────────────┐
+               ▼ (First message in thread?)             ▼ (Subsequent messages)
+   +-----------------------+                +-----------------------+
+   | Compile prefix:       |                | Increment messageCount|
+   | [ACTIVE SKILL: Name]  |                +-----------------------+
+   | + Full Markdown rules |                            │
+   +-----------------------+                            ▼
+               │                            (Has count reached 6?)
+               │                                   ├── Yes ──► Append alignment suffix
+               │                                   └── No ───► Append empty suffix
+               ▼                                        │
+   +----------------------------------------------------+
+   |  Reassemble full prompt string                     |
+   +----------------------------------------------------+
+               │
+               ▼
+   +----------------------------------------------------+
+   |  Write to target contenteditable area / textarea   |
+   +----------------------------------------------------+
+               │
+               ▼
+   +----------------------------------------------------+
+   |  Dispatch UI 'input' and 'change' state events     |
+   +----------------------------------------------------+
+               │
+               ▼
+   +----------------------------------------------------+
+   |  Programmatically invoke Send Button element click |
+   +----------------------------------------------------+
 ```
 
 The system bypasses React and ProseMirror virtual DOM bindings using a simulated property injector:
