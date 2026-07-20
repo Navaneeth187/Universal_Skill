@@ -174,37 +174,33 @@ A developer running the CLI can easily manage workspace instructions:
 
 ---
 
-## 4. Implementation Steps for building Version B with Claude Code
+## 4. Completed CLI Implementation & Verification
 
-To build the CLI version of Universal Skills, the developer agent (Claude Code) should follow this sequence:
+The CLI compiler tool (Version B) has been fully implemented in TypeScript as a zero-dependency package, utilizing native Node.js APIs (`fs`, `path`, `os`, `https`) for maximum performance and portability.
 
-### Step 1: Bootstrap Command Line Tooling
-* Initialize a Node/TypeScript project with `commander` or `yargs` for CLI arguments, and `chalk` for terminal styling.
-* Set up global directory structures (`~/.universal-skills/library`) using Node's `fs` modules.
+### 4.1 CLI Architecture & Components:
+* **Entry Point (`src/cli/index.ts`):** Parses arguments, routes subcommands, prints stylized ANSI help, and handles global database initialization (seeding default skills).
+* **Parser & Cache Handler (`src/cli/parser.ts`):** Parses YAML frontmatter dynamically, converts standard GitHub URLs to raw URLs, fetches markdown files over HTTP/HTTPS, and handles configuration read/write operations.
+* **Compiler Target Engine (`src/cli/compiler.ts`):** Merges active repository skills, wraps them with safety delimiter blocks to protect custom user rules, and writes them to configured targets (`CLAUDE.md`, `.cursorrules`, and `.github/copilot-instructions.md`).
 
-### Step 2: Implement the Markdown YAML Parser
-* Write a robust parser that parses Frontmatter (using simple regex or `js-yaml`) and extracts markdown instructions.
-* Add remote fetch support (using native `fetch` or `axios`) to convert GitHub URLs to raw URLs and download files.
+### 4.2 Building and Compiling the CLI:
+The CLI tool is compiled using `esbuild` to a single CommonJS module file (`bin/uskills.cjs`), which runs natively on Node.js without package overhead:
+```bash
+# Build the CLI bundle
+npm run build:cli
+```
 
-### Step 3: Implement Project Workspace Initialization & CLI Commands
-* Code the `uskills init` command to create the workspace configurations.
-* Implement the list, add, remove, and install commands to read and write from `universal-skills.json` and the global database.
+### 4.3 Running CLI Commands:
+```bash
+# Initialize project config
+node bin/uskills.cjs init
 
-### Step 4: Implement target compilers
-* Implement output handlers for each specific IDE target:
-  - **CLAUDE.md:** Compiles skills, lists key shell command shortcuts, and formats instructions for the Claude Code CLI.
-  - **.cursorrules:** Generates JSON or markdown formatted instructions depending on the version of Cursor used.
-  - **copilot-instructions:** Places compiled instructions inside `.github/copilot-instructions.md`.
-* Ensure files have safety delimiters so developers can also write standard project rules directly inside the file without having them overwritten during recompilation:
-  ```markdown
-  # Project Specific Rules (Custom)
-  [User-written rules go here]
+# List available skills
+node bin/uskills.cjs list
 
-  # === UNIVERSAL SKILLS AUTO-GENERATED BLOCK (DO NOT EDIT) ===
-  [Compiled skills output]
-  # === END OF UNIVERSAL SKILLS BLOCK ===
-  ```
+# Add skill to project
+node bin/uskills.cjs add python-expert
 
-### Step 5: Test Execution & Packaging
-* Verify compilation by running dry-run test compilations in mock project workspaces.
-* Package the CLI tool into a globally installable npm package (`npm link` or `npm install -g`).
+# Compile project skills to targets
+node bin/uskills.cjs compile
+```
