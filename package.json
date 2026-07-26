@@ -3,13 +3,9 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "bin": {
-    "uskills": "./bin/uskills.cjs"
-  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "build:cli": "esbuild src/cli/index.ts --bundle --platform=node --outfile=bin/uskills.cjs",
     "lint": "oxlint",
     "preview": "vite preview"
   },
