@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="src/assets/logo.png" width="800" alt="Universal Skills Banner">
+  <img src="src/assets/logo.png" width="160" alt="Universal Skills Logo">
 </p>
 
 # Universal Skills 🛠️
@@ -110,8 +110,8 @@ Until Universal Skills is published in the Chrome Web Store, install it unpacked
 
 1. Clone this repository to your local machine:
    ```bash
-   git clone https://github.com/your-username/universal-skills.git
-   cd universal-skills
+   git clone https://github.com/Navaneeth187/Universal_Skill.git
+   cd Universal_Skill
    ```
 2. Install dependencies and compile the extension:
    ```bash
