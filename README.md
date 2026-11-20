@@ -81,7 +81,7 @@ By message 10, the context window shifts, instructions drift, and the LLM revert
 * 🛡️ **Shadow DOM Isolation:** Renders options overlays, toggle indicators, and active badges completely inside isolated Shadow DOM nodes (`#universal-skills-root`) to guarantee zero page CSS conflicts.
 * 📦 **GitHub Sync Pipeline:** Imports remote `.md` skills directly from raw GitHub URLs. Parses YAML frontmatter dynamically to extract `name`, `version`, `author`, `icon`, and `systemInstructions`.
 * 🔄 **React & ProseMirror State Bypass:** Intercepts clicks and keyboard triggers, updating internal text inputs using high-compatibility event dispatchers and fallback text inserts.
-* 🎚️ **Platform Activation Matrix:** Configures a custom rules matrix mapping each skill to a platform with options: `Always ON`, `Always OFF`, or `Ask to Activate` (toast notification prompts).
+* 🎚️ **Platform Activation Matrix:** Configures a custom rules matrix mapping each skill to a platform with options: `Always ON` or `Always OFF`.
 * 🛠️ **CLI Sync (Version B Roadmap):** Compiles the exact same markdown skills directly into your local IDE configs (`CLAUDE.md`, `.cursorrules`, `.github/copilot-instructions.md`) with delimiter protection wrappers.
 
 ---

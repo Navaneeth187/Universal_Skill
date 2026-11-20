@@ -197,79 +197,6 @@ const WIDGET_STYLES = `
     color: var(--text-main);
   }
 
-  .toast-container {
-    position: fixed;
-    bottom: 84px;
-    right: 24px;
-    width: 300px;
-    display: flex;
-    flex-direction: column-reverse;
-    gap: 12px;
-    z-index: 999999;
-    pointer-events: none;
-  }
-
-  .ask-toast {
-    width: 100%;
-    background: rgba(15, 23, 42, 0.95);
-    backdrop-filter: blur(12px);
-    border: 1px solid var(--primary);
-    border-radius: 12px;
-    padding: 16px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-    display: none;
-    flex-direction: column;
-    gap: 12px;
-    transition: all 0.3s ease;
-    pointer-events: auto;
-  }
-  .ask-toast.show {
-    display: flex;
-    animation: slideUp 0.3s ease;
-  }
-  @keyframes slideUp {
-    from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
-  .toast-title {
-    font-weight: 700;
-    font-size: 0.9rem;
-    color: var(--text-main);
-  }
-  .toast-body {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    line-height: 1.4;
-  }
-  .toast-actions {
-    display: flex;
-    gap: 8px;
-    justify-content: flex-end;
-  }
-  .toast-btn {
-    border: none;
-    border-radius: 6px;
-    padding: 6px 12px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  .toast-btn-primary {
-    background: var(--primary);
-    color: white;
-  }
-  .toast-btn-primary:hover {
-    background: var(--primary-hover);
-  }
-  .toast-btn-secondary {
-    background: rgba(255, 255, 255, 0.08);
-    color: var(--text-main);
-  }
-  .toast-btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.15);
-  }
-
   .floating-badge {
     position: fixed;
     top: 24px;
@@ -721,13 +648,8 @@ function createInPageWidget() {
   const panel = document.createElement('div');
   panel.className = 'sidebar-panel';
   
-  // Toast Container
-  const toastContainer = document.createElement('div');
-  toastContainer.className = 'toast-container';
-  
   shadow.appendChild(badge);
   shadow.appendChild(panel);
-  shadow.appendChild(toastContainer);
 
   // Apply position and setup drag listeners
   setupDraggableBadge(shadow);
@@ -925,86 +847,6 @@ function setupDraggableBadge(shadow: ShadowRoot) {
   badge.addEventListener('touchstart', onPointerDown, { passive: true });
 }
 
-let promptedSkillIds = new Set<string>();
-
-function showAskToast(shadow: ShadowRoot, skill: Skill) {
-  if (promptedSkillIds.has(skill.id)) return;
-  promptedSkillIds.add(skill.id);
-
-  const container = shadow.querySelector('.toast-container');
-  if (!container) return;
-
-  let toast = container.querySelector(`#ask-toast-${skill.id}`) as HTMLElement;
-  if (!toast) {
-    toast = document.createElement('div');
-    toast.id = `ask-toast-${skill.id}`;
-    toast.className = 'ask-toast';
-    container.appendChild(toast);
-  }
-
-  toast.innerHTML = `
-    <div class="toast-title">Activate ${skill.icon || '🧠'} ${skill.name}?</div>
-    <div class="toast-body">Would you like to bind this skill overlay to the current chat session?</div>
-    <div class="toast-actions">
-      <button class="toast-btn toast-btn-secondary" id="toast-ignore">Ignore</button>
-      <button class="toast-btn toast-btn-secondary" id="toast-always">Always ON</button>
-      <button class="toast-btn toast-btn-primary" id="toast-enable">Enable</button>
-    </div>
-  `;
-
-  toast.classList.add('show');
-
-  toast.querySelector('#toast-ignore')?.addEventListener('click', async () => {
-    toast.classList.remove('show');
-    toast.remove();
-    const currentPlatform = detectPlatform();
-    const storageData = await safeGetStorage(['platformRules']);
-    const platformRules = (storageData.platformRules || {}) as Record<string, Record<string, string>>;
-    if (!platformRules[skill.id]) platformRules[skill.id] = {};
-    platformRules[skill.id][currentPlatform] = 'always-off';
-    await safeSetStorage({ platformRules });
-  });
-
-  toast.querySelector('#toast-always')?.addEventListener('click', async () => {
-    toast.classList.remove('show');
-    toast.remove();
-    const currentPlatform = detectPlatform();
-    const storageData = await safeGetStorage(['platformRules']);
-    const platformRules = (storageData.platformRules || {}) as Record<string, Record<string, string>>;
-    if (!platformRules[skill.id]) platformRules[skill.id] = {};
-    platformRules[skill.id][currentPlatform] = 'always-on';
-    await safeSetStorage({ platformRules });
-
-    if (!activeSkillIds.includes(skill.id)) {
-      activeSkillIds.push(skill.id);
-      await safeSendMessage({
-        action: 'SET_ACTIVE_SKILLS',
-        chatKey: currentChatKey,
-        activeSkillIds
-      });
-      triggerAttachmentFlow();
-      updateBadgeState(shadow);
-      if (isWidgetOpen) renderWidgetContent(shadow);
-    }
-  });
-
-  toast.querySelector('#toast-enable')?.addEventListener('click', async () => {
-    toast.classList.remove('show');
-    toast.remove();
-    if (!activeSkillIds.includes(skill.id)) {
-      activeSkillIds.push(skill.id);
-      await safeSendMessage({
-        action: 'SET_ACTIVE_SKILLS',
-        chatKey: currentChatKey,
-        activeSkillIds
-      });
-      triggerAttachmentFlow();
-      updateBadgeState(shadow);
-      if (isWidgetOpen) renderWidgetContent(shadow);
-    }
-  });
-}
-
 // Load current state of skills & active skills
 async function loadState() {
   try {
@@ -1095,14 +937,6 @@ async function loadState() {
           if (!initialActiveIds.includes(skill.id)) {
             initialActiveIds.push(skill.id);
           }
-        } else if (rule === 'ask') {
-          setTimeout(() => {
-            const widgetRoot = document.getElementById('universal-skills-root');
-            const shadow = widgetRoot?.shadowRoot;
-            if (shadow) {
-              showAskToast(shadow, skill);
-            }
-          }, 1500);
         }
       }
       
